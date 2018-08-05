@@ -1,0 +1,28 @@
+{
+  "name": "simworkbenck-backend",
+  "version": "0.1.0",
+  "description": "simworkbench backend",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/simtool/simworkbench.git"
+  },
+  "author": "DuanPengfei <duanpengfei1993@qq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/simtool/simworkbench/issues"
+  },
+  "homepage": "https://github.com/simtool/simworkbench#readme",
+  "dependencies": {
+    "koa": "^2.5.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-cors": "^0.0.16",
+    "koa-router": "^7.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.3.0"
+  }
+}
