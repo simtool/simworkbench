@@ -1,4 +1,4 @@
-@startuml simworkbench 数据库关系
+@startuml simworkbench_database_relation
 skinparam dpi 300
 
 !define TABLE (T,#FFAAAA) Database Table
@@ -6,16 +6,17 @@ skinparam dpi 300
 class task << TABLE >> {
 id \t\t\t\t char[24] \t 主键 ID
 content \t\t\t text \t\t 任务内容
-createTime \t\t timestamp \t 任务创建时间
-updateTime \t\t timestamp \t 任务更新时间
-expirationTime \t timestamp \t 任务过期时间
-creatorId \t\t char[24] \t 任务创建人 ID
-executorId \t\t char[24] \t 任务执行人 ID
+create_time \t\t timestamp \t 任务创建时间
+update_time \t\t timestamp \t 任务更新时间
+expiration_time \t timestamp \t 任务过期时间
+creator_id \t\t char[24] \t 任务创建人 ID
+executor_id \t\t char[24] \t 任务执行人 ID
 completed \t\t tinyint[1] \t 已完成标识，0：未完成，1：已完成
-parentId \t\t char[24] \t 主任务 ID，当前任务为主任务时值为：000000000000000000000000
-projectId \t\t char[24] \t 任务所属项目 ID
-columnId \t\t char[24] \t 任务所属列 ID
+parent_id \t\t char[24] \t 主任务 ID，当前任务为主任务时值为：000000000000000000000000
+project_id \t\t char[24] \t 任务所属项目 ID
+column_id \t\t char[24] \t 任务所属列 ID
 sequence \t\t int[11] \t\t 任务在所属列中的排序
+comment \t\t text \t\t 任务评论
 deleted \t\t\t tinyint[1] \t 软删除标识，0：未删除，1：已删
 }
 
@@ -23,38 +24,39 @@ class project << TABLE >> {
 id \t\t\t char[24] \t\t 主键 ID
 title \t\t\t varchar[128] \t 项目名称
 description \t text \t\t\t 项目描述
-createTime \t timestamp \t\t 项目创建时间
-updateTime \t timestamp \t\t 项目更新时间
-creatorId \t char[24] \t\t 项目创建人 ID
+create_time \t timestamp \t\t 项目创建时间
+update_time \t timestamp \t\t 项目更新时间
+creator_id \t char[24] \t\t 项目创建人 ID
 deleted \t\t tinyint[1] \t\t 软删除标识，0：未删除，1：已删除
 }
 
 class column << TABLE >> {
 id \t\t\t char[24] \t\t 主键 ID
 title \t\t\t varchar[128] \t 任务列名称
-projectId \t char[24] \t\t 任务所属项目 ID
-createTime \t timestamp \t\t 项目创建时间
-updateTime \t timestamp \t\t 项目更新时间
-creatorId \t char[24] \t\t 项目创建人 ID
-sequence \t int[11] 任务在所属列中的排序,
+project_id \t char[24] \t\t 任务所属项目 ID
+create_time \t timestamp \t\t 项目创建时间
+update_time \t timestamp \t\t 项目更新时间
+creator_id \t char[24] \t\t 项目创建人 ID
+sequence \t int[11] \t\t\t 任务在所属列中的排序,
 deleted \t\t tinyint[1] \t\t 软删除标识，0：未删除，1：已删除
 }
 
 class user << TABLE >> {
-id \t\t\t char[24] \t\t 主键 ID
-username \t varchar[128] \t 用户名
-password \t char[40] \t\t 用户密码 sha1 值
-email \t\t varchar[128] \t 用户邮箱
-phone \t\t varchar[20] \t\t 用户手机号
-createTime \t timestamp \t\t 项目创建时间
-updateTime \t timestamp \t\t 项目更新时间
-deleted \t\t tinyint[1] \t\t 软删除标识，0：未删除，1：已删除
+id \t\t\t\t\t\t\t char[24] \t\t 主键 ID
+username \t\t\t\t\t varchar[128] \t 用户名
+password \t\t\t\t\t char[40] \t\t 用户密码 sha1 值
+email \t\t\t\t\t\t varchar[128] \t 用户邮箱
+phone \t\t\t\t\t\t varchar[20] \t\t 用户手机号
+weekly_newspaper_receiver \t text \t\t\t 周报收件人
+create_time \t\t\t\t\t timestamp \t\t 项目创建时间
+update_time \t\t\t\t\t timestamp \t\t 项目更新时间
+deleted \t\t\t\t\t\t tinyint[1] \t\t 软删除标识，0：未删除，1：已删除
 }
 
 class project_user << TABLE >> {
 id \t\t\t int[11] \t\t 自增 ID 
-projectId \t char[24] \t 项目 ID
-userId \t\t char[24] \t 用户 ID
+project_id \t char[24] \t 项目 ID
+user_id \t\t char[24] \t 用户 ID
 }
 
 project "1" --> "n" project_user
