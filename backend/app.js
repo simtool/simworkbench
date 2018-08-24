@@ -2,7 +2,7 @@
  * @Author: fei
  * @Date: 2018-08-04 18:04:24
  * @Last Modified by: fei
- * @Last Modified time: 2018-08-24 22:09:44
+ * @Last Modified time: 2018-08-24 22:32:55
  */
 'use strict';
 
@@ -16,6 +16,7 @@ const path = require('path');
  * require: third part module
  */
 const _ = require('lodash');
+const debug = require('debug')(`simworkbench ${__filename}`);
 const Koa = require('koa');
 const koaBodyParser = require('koa-bodyparser');
 
@@ -25,6 +26,7 @@ const koaBodyParser = require('koa-bodyparser');
 const config = require('./config/index.js');
 const columnRouter = require('./route/column.js');
 const projectRouter = require('./route/project.js');
+const sessionRouter = require('./route/session.js');
 const taskRouter = require('./route/task.js');
 const userRouter = require('./route/user.js');
 
@@ -65,26 +67,19 @@ app.use(async function uncaughtExceptionHandler(ctx, next) {
 app
     .use(columnRouter.routes())
     .use(projectRouter.routes())
+    .use(sessionRouter.routes())
     .use(taskRouter.routes())
     .use(userRouter.routes())
-    
+
     // 404 error handler
-    .use(function notFoundErrorHandler(ctx) {
-        const error = new Error('not found');
-        error.status = 404;
-        error.code = 40400001;
-        ctx.status = error.status;
-        ctx.body = {
-            code: error.code,
-            message: error.message,
-            data: {}
-        };
-        return;
+    .use(function notFoundErrorHandler() {
+        throw new config.customError.NotFound('api not found');
     });
 
 /**
  * server: write runtime config to file
  */
+debug(JSON.stringify(config, null, 4));
 const runFolderPath = path.resolve(__dirname, 'run');
 const isRunFolderPathExist = fs.existsSync(runFolderPath);
 if (!isRunFolderPathExist) fs.mkdirSync(runFolderPath);

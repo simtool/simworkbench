@@ -2,7 +2,7 @@
  * @Author: fei
  * @Date: 2018-08-06 10:01:39
  * @Last Modified by: fei
- * @Last Modified time: 2018-08-24 22:13:24
+ * @Last Modified time: 2018-08-24 22:59:23
  */
 'use strict';
 
@@ -38,11 +38,12 @@ User.retrieveUserById = async function (id) {
     return user;
 }
 
-User.retrieveUserPasswordByUsername = async function (username) {
+User.retrieveUserPasswordByEmail = async function (email) {
     let user = await this
         .where({
-            username: username
+            email: email
         })
+        .field('password')
         .findOne();
     if (!user) throw new customError.NotFound('user not found');
     user = user.toJSON();
@@ -50,6 +51,17 @@ User.retrieveUserPasswordByUsername = async function (username) {
 }
 
 User.createUser = async function (userInfo) {
+    const existUser = await this
+        .where({
+            email: userInfo.email
+        })
+        .findOne();
+
+    console.log(existUser);
+
+    if (existUser && !existUser.deleted) throw new customError.BadRequest('email already exist');
+    if (existUser) await existUser.delete();
+
     userInfo.id = generateObjectId();
     userInfo.password = md5(userInfo.password);
     const user = this.build(userInfo);
@@ -117,11 +129,11 @@ User.updateUserPassword = async function (id, userInfo) {
 
 User.deleteUser = async function (id) {
     let user = await this
-    .where({
-        id: id,
-        deleted: false,
-    })
-    .findOne();
+        .where({
+            id: id,
+            deleted: false,
+        })
+        .findOne();
 
     if (!user) throw new customError.NotFound('user not found');
 
@@ -131,7 +143,7 @@ User.deleteUser = async function (id) {
         id: result.id,
         username: result.username,
         email: result.email,
-        phone: result.phone ,
+        phone: result.phone,
         weeklyNewspaperReceiver: result.weeklyNewspaperReceiver,
         createTime: result.createTime,
         updateTime: result.updateTime

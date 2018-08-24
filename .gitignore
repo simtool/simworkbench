@@ -7,3 +7,6 @@
 node_modules
 npm-debug.log*
 out
+
+backend/config/local.js
+backend/run

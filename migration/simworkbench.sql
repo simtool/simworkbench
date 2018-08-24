@@ -68,7 +68,8 @@ CREATE TABLE `user` (
     `create_time` varchar(16) NOT NULL COMMENT '项目创建时间',
     `update_time` varchar(16) NOT NULL COMMENT '项目更新时间',
     `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '软删除标识，0：未删除，1：已删除',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `UNIQUE_EMAIL` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
