@@ -2,7 +2,7 @@
  * @Author: fei
  * @Date: 2018-08-04 18:04:24
  * @Last Modified by: fei
- * @Last Modified time: 2018-08-24 16:16:22
+ * @Last Modified time: 2018-08-24 22:09:44
  */
 'use strict';
 
@@ -38,22 +38,24 @@ app.use(koaBodyParser());
 /**
  * app: uncaught exception handler
  */
-app.use(async (ctx, next) => {
+app.use(async function uncaughtExceptionHandler(ctx, next) {
     try {
         await next();
         ctx.status = 200;
-        return ctx.body = {
+        ctx.body = {
             code: 20000001,
             message: 'success',
             data: ctx.body || {}
         };
+        return;
     } catch (error) {
         ctx.status = Number(error.status) || 500;
-        return ctx.body = {
+        ctx.body = {
             code: Number(error.code) || 50000001,
             message: error.message || 'internal server error',
             data: {}
-        }
+        };
+        return;
     }
 });
 
@@ -67,16 +69,17 @@ app
     .use(userRouter.routes())
     
     // 404 error handler
-    .use(ctx => {
+    .use(function notFoundErrorHandler(ctx) {
         const error = new Error('not found');
         error.status = 404;
         error.code = 40400001;
         ctx.status = error.status;
-        return ctx.body = {
+        ctx.body = {
             code: error.code,
             message: error.message,
             data: {}
         };
+        return;
     });
 
 /**

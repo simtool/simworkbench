@@ -2,13 +2,14 @@
  * @Author: fei
  * @Date: 2018-08-06 10:01:39
  * @Last Modified by: fei
- * @Last Modified time: 2018-08-24 16:53:01
+ * @Last Modified time: 2018-08-24 22:13:24
  */
 'use strict';
 
 const Type = require('../lib/mysql/toshihiko.js').Type;
 const toshihiko = require('../lib/mysql/toshihiko.js').toshihiko;
 
+const customError = require('../config/index.js').customError;
 const generateObjectId = require('../lib/mysql/generate_object_id.js');
 const md5 = require('../lib/md5.js');
 
@@ -26,14 +27,13 @@ const User = toshihiko.define('user', [
 
 User.retrieveUserById = async function (id) {
     let user = await this
+        .where({
+            id: id,
+            deleted: false
+        })
         .field('id, username, email, phone, weeklyNewspaperReceiver, createTime, updateTime')
-        .findById(id);
-    if (!user) {
-        const error = new Error('user not found');
-        error.status = 404;
-        error.code = 40400001;
-        throw error;
-    }
+        .findOne(id);
+    if (!user) throw new customError.NotFound('user not found');
     user = user.toJSON();
     return user;
 }
@@ -44,12 +44,7 @@ User.retrieveUserPasswordByUsername = async function (username) {
             username: username
         })
         .findOne();
-    if (!user) {
-        const error = new Error('user not found');
-        error.status = 404;
-        error.code = 40400001;
-        throw error;
-    }
+    if (!user) throw new customError.NotFound('user not found');
     user = user.toJSON();
     return user.password;
 }
@@ -78,12 +73,8 @@ User.updateUser = async function (id, userInfo) {
         })
         .findOne();
 
-    if (!user) {
-        const error = new Error('user not exist');
-        error.status = 404;
-        error.code = 40400001;
-        throw error;
-    }
+
+    if (!user) throw new customError.NotFound('user not found');
 
     Object.keys(userInfo).forEach(key => user[key] = userInfo[key]);
     const result = (await user.update()).toJSON();
@@ -108,12 +99,7 @@ User.updateUserPassword = async function (id, userInfo) {
         })
         .findOne();
 
-    if (!user) {
-        const error = new Error('user not exist');
-        error.status = 404;
-        error.code = 40400001;
-        throw error;
-    }
+    if (!user) throw new customError.NotFound('user not found');
 
     Object.keys(userInfo).forEach(key => user[key] = userInfo[key]);
     const result = (await user.update()).toJSON();
@@ -137,12 +123,7 @@ User.deleteUser = async function (id) {
     })
     .findOne();
 
-    if (!user) {
-        const error = new Error('user not exist');
-        error.status = 404;
-        error.code = 40400001;
-        throw error;
-    }
+    if (!user) throw new customError.NotFound('user not found');
 
     user.deleted = true;
     const result = (await user.update()).toJSON();

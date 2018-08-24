@@ -2,7 +2,7 @@
  * @Author: fei
  * @Date: 2018-08-06 09:57:34
  * @Last Modified by: fei
- * @Last Modified time: 2018-08-07 09:44:14
+ * @Last Modified time: 2018-08-24 21:54:28
  */
 'use strict';
 
@@ -25,15 +25,9 @@ const toshihiko = new T.Toshihiko('mysql', {
 T.Type.Timestamp = {
     name: "Timestamp",
     needQuotes: true,
-    parse: function(origin) {
-        return parseInt(origin);
-    },
-    restore: function(parsed) {
-        return parsed.toString();
-    },
-    equal: function(a, b) {
-        return a.toString() === b.toString();
-    },
+    parse: origin => parseInt(origin),
+    restore: parsed => parsed.toString(),
+    equal: (a, b) => a.toString() === b.toString(),
     defaultValue: Date.now()
 };
 

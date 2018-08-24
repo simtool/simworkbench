@@ -2,7 +2,7 @@
  * @Author: fei
  * @Date: 2018-08-06 13:43:22
  * @Last Modified by: fei
- * @Last Modified time: 2018-08-07 10:12:41
+ * @Last Modified time: 2018-08-24 22:05:32
  */
 'use strict';
 
@@ -23,7 +23,7 @@ module.exports = {
             columnId: ctx.query.columnId,
             executorId: ctx.query.executorId
         }
-        Object.keys(condition).forEach(key => {
+        Object.keys(condition).forEach(function (key) {
             if (condition[key] === undefined) {
                 delete condition[key]
             }
@@ -35,6 +35,7 @@ module.exports = {
 
         debug(`tasks:\n${JSON.stringify(tasks, null, 4)}`);
 
-        return ctx.body = tasks;
+        ctx.body = tasks;
+        return;
     }
 };

@@ -2,14 +2,13 @@
  * @Author: fei
  * @Date: 2018-08-06 13:43:22
  * @Last Modified by: fei
- * @Last Modified time: 2018-08-24 16:54:11
+ * @Last Modified time: 2018-08-24 22:13:53
  */
 'use strict';
 
 /**
  * third part module
  */
-const debug = require('debug')(`simworkbench: ${__filename}`);
 const joi = require('joi');
 
 /**
@@ -19,11 +18,10 @@ const User = require('../model/user.js');
 
 module.exports = {
     async retrieveUserById(ctx) {
-        debug(ctx.request.header);
-
         const id = ctx.params.id;
         const user = await User.retrieveUserById(id);
-        return ctx.body = user;
+        ctx.body = user;
+        return;
     },
 
     async createUser(ctx) {
@@ -50,7 +48,8 @@ module.exports = {
         }
 
         const user = await User.createUser(userInfo);
-        return ctx.body = user;
+        ctx.body = user;
+        return;
     },
 
     async updateUser(ctx) {
@@ -78,7 +77,8 @@ module.exports = {
         }
 
         const user = await User.updateUser(ctx.params.id, userInfo);
-        return ctx.body = user;
+        ctx.body = user;
+        return;
     },
 
     async updateUserPassword(ctx) {
@@ -97,11 +97,13 @@ module.exports = {
         }
 
         const user = await User.updateUserPassword(ctx.params.id, userInfo);
-        return ctx.body = user;
+        ctx.body = user;
+        return;
     },
 
     async deleteUser(ctx) {
         const result = await User.deleteUser(ctx.params.id);
-        return ctx.body = result;
+        ctx.body = result;
+        return;
     }
 };
