@@ -2,7 +2,7 @@
  * @Author: fei
  * @Date: 2018-08-04 18:24:54
  * @Last Modified by: fei
- * @Last Modified time: 2018-08-04 18:29:11
+ * @Last Modified time: 2018-08-06 13:48:38
  */
 'use strict';
 
@@ -11,12 +11,15 @@
  */
 const KoaRouter = require('koa-router');
 
+/**
+ * custom module
+ */
+const taskController = require('../controller/task.js');
+
 const router = new KoaRouter();
 router
     .prefix('/api/tasks')
-    .get('/', async ctx => {
-        return ctx.body = 'get task';
-    })
+    .get('/', taskController.retrieveTasks)
     .post('/', async ctx => {
         return ctx.body = 'post task';
     })
