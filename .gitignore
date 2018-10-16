@@ -10,3 +10,6 @@ out
 
 backend/config/local.js
 backend/run
+
+frontend/dist
+
